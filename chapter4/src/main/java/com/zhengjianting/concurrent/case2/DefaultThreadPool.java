@@ -68,16 +68,15 @@ public class DefaultThreadPool<Job extends Runnable> implements ThreadPool<Job> 
             if (num >= this.workerNum) {
                 throw new IllegalArgumentException("beyond workNum");
             }
-            // 按照给定的数量停止 Worker
-            int count = 0;
-            while (count < num) {
-                Worker worker = workers.get(count);
+            // 按照给定的数量停止 Worker, 原书的实现貌似有误
+            int cnt = num;
+            while (cnt-- > 0) {
+                Worker worker = workers.get(0);
                 if (workers.remove(worker)) {
                     worker.shutdown();
-                    count++;
                 }
             }
-            this.workerNum -= count;
+            this.workerNum -= num;
         }
     }
 
