@@ -16,11 +16,11 @@ volatile 在多处理器开发中保证了共享变量的 "可见性"
 
 假设有三个线程都对变量 a 执行 a++ 操作，起初，它们都从主内存中读取变量 a 的值到各自的本地内存中：
 
-<img src="C:\Users\zjt\AppData\Roaming\Typora\typora-user-images\image-20220608232525696.png" alt="image-20220608232525696" style="zoom:80%;" />
+<img src="../picture/volatile/image-20220608232525696.png" alt="image-20220608232525696" style="zoom:80%;" />
 
 假设线程 A 先执行，它在本地内存中将变量 a 加一之后写回主内存：
 
-<img src="C:\Users\zjt\AppData\Roaming\Typora\typora-user-images\image-20220608232551303.png" alt="image-20220608232551303" style="zoom:80%;" />
+<img src="../picture/volatile/image-20220608232551303.png" alt="image-20220608232551303" style="zoom:80%;" />
 
 此时，线程 B 和 线程 C 在本地内存中缓存的变量 a 是旧值 0，等它们都执行完毕之后，主内存中变量 a 的值将会是 1，而不是预期的 3
 
@@ -37,7 +37,7 @@ volatile 在多处理器开发中保证了共享变量的 "可见性"
 
 如下图所示，为了提高处理速度，处理器不直接和内存进行通信，而是先将系统内存的数据读到内部缓存 ( L1，L2 或其他 ) 后再进行操作，但操作完不知道何时会写到内存。如果对声明了 volatile 的变量进行写操作，JVM 就会向处理器发送一条 Lock 前缀的指令，将这个变量所在的缓存行的数据写回到系统内存。但是，就算写回到内存，如果其他处理器缓存的值还是旧的，再执行计算操作就会有问题。所以，在多处理器下，为了保证各个处理器的缓存是一致的，就会实现缓存一致性协议，每个处理器通过嗅探在总线上传播的数据来检查自己缓存的值是不是过期了，当处理器发现自己缓存行对应的内存地址被修改，就会将当前处理器的缓存行设置为无效状态，当处理器对这个数据进行修改操作的时候，会重新从系统内存中把数据读到处理器缓存里
 
-<img src="C:\Users\zjt\AppData\Roaming\Typora\typora-user-images\image-20220609223030547.png" alt="image-20220609223030547" style="zoom:80%;" />
+<img src="../picture/volatile/image-20220609223030547.png" alt="image-20220609223030547" style="zoom:80%;" />
 
 ### 4. Java 内存模型中 volatile 的内存语义
 
@@ -89,7 +89,7 @@ volatile 写 - 读的内存语义：
 - 当写一个 volatile 变量时，JMM 会把该线程对应的本地内存中的共享变量值刷新到主内存
 - 当读一个 volatile 变量时，JMM 会把该线程对应的本地内存置为无效，线程接下来将从主内存中读取共享变量
 
-<img src="C:\Users\zjt\AppData\Roaming\Typora\typora-user-images\image-20220609223232945.png" alt="image-20220609223232945" style="zoom:80%;" />
+<img src="../picture/volatile/image-20220609223232945.png" alt="image-20220609223232945" style="zoom:80%;" />
 
 从 JSR-133 开始 ( 即从 JDK 5 开始 )，volatile 变量的写 - 读可以实现线程之间的通信：
 

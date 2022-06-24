@@ -106,7 +106,7 @@ public class Priority {
 
 Java 线程在运行的生命周期中可能处于下表所示的 6 种不同的状态，在给定的一个时刻，线程只能处于其中的一个状态
 
-<img src="C:\Users\zjt\AppData\Roaming\Typora\typora-user-images\image-20220612135029385.png" alt="image-20220612135029385" style="zoom:80%;" />
+<img src="../picture/thread/image-20220612135029385.png" alt="image-20220612135029385" style="zoom:80%;" />
 
 示例代码：
 
@@ -211,7 +211,7 @@ public class ThreadState {
 
 线程在自身的生命周期中，并不是固定地处于某个状态，而是随着代码的执行在不同的状态之间进行切换，Java 线程状态变迁如图所示：
 
-<img src="C:\Users\zjt\AppData\Roaming\Typora\typora-user-images\image-20220612140850567.png" alt="image-20220612140850567" style="zoom:80%;" />
+<img src="../picture/thread/image-20220612140850567.png" alt="image-20220612140850567" style="zoom:80%;" />
 
 Java 将操作系统中的运行和就绪两个状态合并称为运行状态。阻塞状态是线程阻塞在进入 synchronized 关键字修饰的方法或代码块 ( 获取锁 ) 时的状态，但是阻塞在 java.concurrent 包中的 Lock 接口的线程状态却是等待状态，因为 java.concurrent 包中 Lock 接口对于阻塞的实现均使用了 LockSupport 类中的相关方法
 
@@ -428,7 +428,7 @@ Count i = 771871002
 
 下图描述了对象、对象的监视器、同步队列和执行线程之间的关系：
 
-<img src="C:\Users\zjt\AppData\Roaming\Typora\typora-user-images\image-20220612175432756.png" alt="image-20220612175432756" style="zoom:80%;" />
+<img src="../picture/thread/image-20220612175432756.png" alt="image-20220612175432756" style="zoom:80%;" />
 
 从图中可以看到，任意线程对 Object ( Object 由 synchronized 保护 ) 的访问，首先要获得 Object 的监视器。如果获取失败，线程进入同步队列，线程状态变为 BLOCKED。当访问 Object 的前驱 ( 获得了锁的线程 ) 释放了锁，则该释放操作唤醒阻塞在同步队列中的线程，使其重新尝试对监视器的获取
 
@@ -454,7 +454,7 @@ doSomething();
 
 等待 / 通知的相关方法是任意 Java 对象都具备的，因为这些方法被定义在所有对象的超类 java.lang.Object 上，方法和描述如表所示：
 
-<img src="C:\Users\zjt\AppData\Roaming\Typora\typora-user-images\image-20220612210118806.png" alt="image-20220612210118806" style="zoom:80%;" />
+<img src="../picture/thread/image-20220612210118806.png" alt="image-20220612210118806" style="zoom:80%;" />
 
 等待 / 通知机制，是指一个线程 A 调用了对象 O 的 wait() 方法进入等待状态，而另一个线程 B 调用了对象 O 的 notify() 或者 notifyAll() 方法，线程 A 收到通知后从对象 O 的 wait() 方法返回，进而执行后续的操作。上述两个线程通过对象 O 来完成交互，而对象上的 wait() 和 notify() / notifyAll() 的关系就如同开关信号一样，用来完成等待方和通知方之间的交互工作
 
@@ -533,7 +533,7 @@ public class WaitNotify {
 
 简易图示：其中 WaitThread 和 NotifyThread 通过对象 lock 进行交互
 
-<img src="C:\Users\zjt\AppData\Roaming\Typora\typora-user-images\image-20220612225620718.png" alt="image-20220612225620718" style="zoom:80%;" />
+<img src="../picture/thread/image-20220612225620718.png" alt="image-20220612225620718" style="zoom:80%;" />
 
 输出如下：
 
@@ -556,7 +556,7 @@ Thread[WaitThread,5,main] flag is false. running @ 21:31:44
 
 下图描述了上述示例的过程：
 
-<img src="C:\Users\zjt\AppData\Roaming\Typora\typora-user-images\image-20220612214654484.png" alt="image-20220612214654484" style="zoom:80%;" />
+<img src="../picture/thread/image-20220612214654484.png" alt="image-20220612214654484" style="zoom:80%;" />
 
 在上图中，WaitThread 首先获取了对象的锁，然后调用对象的 wait() 方法，从而放弃了锁并进入了对象的等待队列 WaitQueue 中，进入等待状态。由于 WaitThread 释放了对象的锁，NotifyThread 随后获取了对象的锁，并调用对象的 notify() 方法，将 WaitThread 从 WaitQueue 移到 SynchronizedQueue 中，此时 WaitThread 的状态变为阻塞状态。NotifyThread 释放了锁之后，WaitThread 再次获取到锁并从 wait() 方法返回继续执行
 

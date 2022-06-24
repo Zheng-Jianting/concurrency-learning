@@ -14,19 +14,19 @@ Java SE 1.6 为了减少获得锁和释放锁带来的性能消耗，引入了 "
 
 synchronized 用的锁是存在 Java 对象头里的。如果对象是数组类型，则虚拟机用 3 个字宽 ( word ) 存储对象头，如果对象是非数组类型，则用 2 字宽存储对象头。在 32 位虚拟机中，1 字宽即 32 bit
 
-<img src="C:\Users\zjt\AppData\Roaming\Typora\typora-user-images\image-20220609233427256.png" alt="image-20220609233427256" style="zoom:80%;" />
+<img src="../picture/synchronized/image-20220609233427256.png" alt="image-20220609233427256" style="zoom:80%;" />
 
 Java 对象头里的 Mark Word 里默认存储对象的 HashCode、分代年龄和锁标志位。32 位 JVM 的 Mark Word 的默认存储结构如表所示：
 
-<img src="C:\Users\zjt\AppData\Roaming\Typora\typora-user-images\image-20220609233630668.png" alt="image-20220609233630668" style="zoom:80%;" />
+<img src="../picture/synchronized/image-20220609233630668.png" alt="image-20220609233630668" style="zoom:80%;" />
 
 在运行期间，Mark Word 里存储的数据会随着锁标志位的变化而变化。Mark Word 可能变化为存储以下 4 种数据：
 
-<img src="C:\Users\zjt\AppData\Roaming\Typora\typora-user-images\image-20220609233817893.png" alt="image-20220609233817893" style="zoom:80%;" />
+<img src="../picture/synchronized/image-20220609233817893.png" alt="image-20220609233817893" style="zoom:80%;" />
 
 在 64 位虚拟机下，Mark Word 是 64 bit 大小的，其存储结构如表所示：
 
-<img src="C:\Users\zjt\AppData\Roaming\Typora\typora-user-images\image-20220609233900900.png" alt="image-20220609233900900" style="zoom:80%;" />
+<img src="../picture/synchronized/image-20220609233900900.png" alt="image-20220609233900900" style="zoom:80%;" />
 
 ### 2. 偏向锁
 
@@ -34,7 +34,7 @@ Java 对象头里的 Mark Word 里默认存储对象的 HashCode、分代年龄�
 
 偏向锁使用了一种等到竞争出现才释放锁的机制，所以当其他线程尝试竞争偏向锁时，持有偏向锁的线程才会释放锁。下图中线程 1 演示了偏向锁初始化的流程，线程 2 演示了偏向锁撤销的流程
 
-<img src="C:\Users\zjt\AppData\Roaming\Typora\typora-user-images\image-20220609235634390.png" alt="image-20220609235634390" style="zoom:80%;" />
+<img src="../picture/synchronized/image-20220609235634390.png" alt="image-20220609235634390" style="zoom:80%;" />
 
 ### 3. 轻量级锁
 
@@ -48,11 +48,11 @@ Java 对象头里的 Mark Word 里默认存储对象的 HashCode、分代年龄�
 
 下面是两个线程同时争夺锁，导致锁膨胀的流程图：
 
-<img src="C:\Users\zjt\AppData\Roaming\Typora\typora-user-images\image-20220610000258358.png" alt="image-20220610000258358" style="zoom:80%;" />
+<img src="../picture/synchronized/image-20220610000258358.png" alt="image-20220610000258358" style="zoom:80%;" />
 
 #### 4. 锁的优缺点对比
 
-<img src="C:\Users\zjt\AppData\Roaming\Typora\typora-user-images\image-20220610000333651.png" alt="image-20220610000333651" style="zoom:80%;" />
+<img src="../picture/synchronized/image-20220610000333651.png" alt="image-20220610000333651" style="zoom:80%;" />
 
 #### 5. 锁的内存语义
 
@@ -61,7 +61,7 @@ Java 对象头里的 Mark Word 里默认存储对象的 HashCode、分代年龄�
 - 当线程释放锁时，JMM 会把该线程对应的本地内存中的共享变量刷新到主内存中
 - 当线程获取锁时，JMM 会把该线程对应的本地内存置为无效。从而使得被监视器保护的临界区代码必须从主内存中读取共享变量
 
-<img src="C:\Users\zjt\AppData\Roaming\Typora\typora-user-images\image-20220609223232945.png" alt="image-20220609223232945" style="zoom:80%;" />
+<img src="../picture/synchronized/image-20220609223232945.png" alt="image-20220609223232945" style="zoom:80%;" />
 
 对比锁释放 - 获取的内存语义与 volatile 写 - 读的内存语义可以看出：
 
@@ -104,5 +104,5 @@ Java 对象头里的 Mark Word 里默认存储对象的 HashCode、分代年龄�
 
 AQS，非阻塞数据结构和原子变量类 ( java.util.concurrent.atomic 包中的类 )，这些 concurrent 包中的基础类都是使用这种模式来实现的，而 concurrent 包中的高层类又是依赖于这些基础类来实现的。从整体来看，concurrent 包的实现如下图所示：
 
-<img src="C:\Users\zjt\AppData\Roaming\Typora\typora-user-images\image-20220610101205777.png" alt="image-20220610101205777" style="zoom:80%;" />
+<img src="../picture/synchronized/image-20220610101205777.png" alt="image-20220610101205777" style="zoom:80%;" />
 
